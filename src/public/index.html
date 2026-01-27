@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BarberBot Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0f172a; color: #e2e8f0; }
+    .card { background: #1e293b; border-radius: 12px; border: 1px solid #334155; }
+    .stat-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+    .badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 9999px; }
+    .badge-green { background: #065f46; color: #6ee7b7; }
+    .badge-blue { background: #1e3a5f; color: #93c5fd; }
+    .badge-yellow { background: #713f12; color: #fcd34d; }
+    .badge-red { background: #7f1d1d; color: #fca5a5; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 12px; color: #94a3b8; font-weight: 500; border-bottom: 1px solid #334155; }
+    td { padding: 12px; border-bottom: 1px solid #1e293b; }
+    tr:hover { background: #1e293b; }
+  </style>
+</head>
+<body class="min-h-screen p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-white">🪒 BarberBot</h1>
+        <p class="text-slate-400 mt-1">AI Phone Receptionist Dashboard</p>
+      </div>
+      <div id="status" class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></span>
+        <span class="text-green-400 text-sm">Online</span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div class="card stat-card p-6">
+        <p class="text-slate-400 text-sm">Calls Today</p>
+        <p class="text-3xl font-bold text-white mt-1" id="callsToday">-</p>
+      </div>
+      <div class="card stat-card p-6">
+        <p class="text-slate-400 text-sm">Leads Captured</p>
+        <p class="text-3xl font-bold text-emerald-400 mt-1" id="leadsToday">-</p>
+      </div>
+      <div class="card stat-card p-6">
+        <p class="text-slate-400 text-sm">Appointments Today</p>
+        <p class="text-3xl font-bold text-blue-400 mt-1" id="appointmentsToday">-</p>
+      </div>
+      <div class="card stat-card p-6">
+        <p class="text-slate-400 text-sm">Total Customers</p>
+        <p class="text-3xl font-bold text-purple-400 mt-1" id="totalCustomers">-</p>
+      </div>
+    </div>
+
+    <!-- Active Calls -->
+    <div class="card p-6 mb-8" id="activeCallsSection" style="display:none">
+      <h2 class="text-xl font-semibold text-white mb-4">📞 Active Calls</h2>
+      <div id="activeCalls" class="space-y-2"></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-2 mb-4">
+      <button onclick="showTab('calls')" class="tab-btn px-4 py-2 rounded-lg bg-slate-700 text-white text-sm hover:bg-slate-600" id="tab-calls">Recent Calls</button>
+      <button onclick="showTab('customers')" class="tab-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-400 text-sm hover:bg-slate-700" id="tab-customers">Customers</button>
+      <button onclick="showTab('appointments')" class="tab-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-400 text-sm hover:bg-slate-700" id="tab-appointments">Appointments</button>
+    </div>
+
+    <!-- Calls Table -->
+    <div class="card p-6" id="panel-calls">
+      <table>
+        <thead>
+          <tr><th>Time</th><th>Phone</th><th>Direction</th><th>Duration</th><th>Lead</th><th>Booked</th><th>Summary</th></tr>
+        </thead>
+        <tbody id="callsTable"></tbody>
+      </table>
+    </div>
+
+    <!-- Customers Table -->
+    <div class="card p-6" id="panel-customers" style="display:none">
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Phone</th><th>Email</th><th>Since</th></tr>
+        </thead>
+        <tbody id="customersTable"></tbody>
+      </table>
+    </div>
+
+    <!-- Appointments Table -->
+    <div class="card p-6" id="panel-appointments" style="display:none">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Time</th><th>Service</th><th>Staff</th><th>Status</th></tr>
+        </thead>
+        <tbody id="appointmentsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API = '';
+
+    function showTab(tab) {
+      ['calls', 'customers', 'appointments'].forEach(t => {
+        document.getElementById('panel-' + t).style.display = t === tab ? '' : 'none';
+        const btn = document.getElementById('tab-' + t);
+        btn.className = t === tab
+          ? 'tab-btn px-4 py-2 rounded-lg bg-slate-700 text-white text-sm hover:bg-slate-600'
+          : 'tab-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-400 text-sm hover:bg-slate-700';
+      });
+    }
+
+    function formatDuration(s) {
+      if (!s) return '-';
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return m > 0 ? `${m}m ${sec}s` : `${sec}s`;
+    }
+
+    function formatTime(iso) {
+      if (!iso) return '-';
+      return new Date(iso + 'Z').toLocaleString();
+    }
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch(API + '/api/dashboard');
+        const data = await res.json();
+        document.getElementById('callsToday').textContent = data.callsToday;
+        document.getElementById('leadsToday').textContent = data.leadsToday;
+        document.getElementById('appointmentsToday').textContent = data.appointmentsToday;
+        document.getElementById('totalCustomers').textContent = data.totalCustomers;
+
+        const section = document.getElementById('activeCallsSection');
+        const container = document.getElementById('activeCalls');
+        if (data.activeCalls > 0) {
+          section.style.display = '';
+          container.innerHTML = data.activeCallDetails.map(c =>
+            `<div class="flex items-center gap-4 p-3 bg-slate-800 rounded-lg">
+              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              <span class="text-white">${c.phoneNumber}</span>
+              <span class="badge badge-blue">${c.direction}</span>
+              <span class="text-slate-400">${formatDuration(c.duration)}</span>
+            </div>`
+          ).join('');
+        } else {
+          section.style.display = 'none';
+        }
+      } catch(e) { console.error('Dashboard error:', e); }
+    }
+
+    async function loadCalls() {
+      try {
+        const res = await fetch(API + '/api/calls?limit=30');
+        const calls = await res.json();
+        document.getElementById('callsTable').innerHTML = calls.map(c =>
+          `<tr>
+            <td class="text-sm">${formatTime(c.started_at)}</td>
+            <td>${c.phone_number || '-'}</td>
+            <td><span class="badge ${c.direction === 'inbound' ? 'badge-blue' : 'badge-yellow'}">${c.direction}</span></td>
+            <td>${formatDuration(c.duration)}</td>
+            <td>${c.lead_captured ? '<span class="badge badge-green">✓</span>' : '-'}</td>
+            <td>${c.appointment_booked ? '<span class="badge badge-green">✓</span>' : '-'}</td>
+            <td class="text-sm text-slate-400 max-w-xs truncate">${c.summary || '-'}</td>
+          </tr>`
+        ).join('');
+      } catch(e) { console.error(e); }
+    }
+
+    async function loadCustomers() {
+      try {
+        const res = await fetch(API + '/api/customers');
+        const customers = await res.json();
+        document.getElementById('customersTable').innerHTML = customers.map(c =>
+          `<tr>
+            <td>${c.name || '-'}</td>
+            <td>${c.phone}</td>
+            <td>${c.email || '-'}</td>
+            <td class="text-sm text-slate-400">${formatTime(c.created_at)}</td>
+          </tr>`
+        ).join('');
+      } catch(e) { console.error(e); }
+    }
+
+    async function loadAppointments() {
+      try {
+        const res = await fetch(API + '/api/appointments');
+        const appts = await res.json();
+        document.getElementById('appointmentsTable').innerHTML = appts.map(a =>
+          `<tr>
+            <td>${a.date}</td>
+            <td>${a.time}</td>
+            <td>${a.service}</td>
+            <td>${a.staff || '-'}</td>
+            <td><span class="badge ${a.status === 'scheduled' ? 'badge-green' : a.status === 'cancelled' ? 'badge-red' : 'badge-yellow'}">${a.status}</span></td>
+          </tr>`
+        ).join('');
+      } catch(e) { console.error(e); }
+    }
+
+    // Initial load
+    loadDashboard();
+    loadCalls();
+    loadCustomers();
+    loadAppointments();
+
+    // Auto-refresh
+    setInterval(loadDashboard, 5000);
+    setInterval(() => { loadCalls(); loadCustomers(); loadAppointments(); }, 15000);
+  </script>
+</body>
+</html>

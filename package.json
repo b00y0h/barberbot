@@ -1,0 +1,33 @@
+{
+  "name": "barberbot",
+  "version": "1.0.0",
+  "description": "AI-powered voice bot agent for barber shop reception — handles inbound/outbound calls via Twilio, Deepgram STT, OpenAI LLM, and ElevenLabs TTS",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "seed": "tsx scripts/seed-db.ts",
+    "test-call": "tsx scripts/test-call.ts"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "ws": "^8.16.0",
+    "better-sqlite3": "^11.0.0",
+    "twilio": "^5.0.0",
+    "@deepgram/sdk": "^3.0.0",
+    "openai": "^4.0.0",
+    "dotenv": "^16.4.0",
+    "uuid": "^9.0.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/express": "^4.17.21",
+    "@types/ws": "^8.5.10",
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/uuid": "^9.0.7",
+    "@types/cors": "^2.8.17",
+    "tsx": "^4.7.0"
+  }
+}

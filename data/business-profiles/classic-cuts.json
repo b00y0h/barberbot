@@ -1,0 +1,35 @@
+{
+  "name": "Classic Cuts Barbershop",
+  "type": "barbershop",
+  "phone": "+1XXXXXXXXXX",
+  "address": "123 Main Street, Richmond, VA 23220",
+  "hours": {
+    "monday": { "open": "9:00 AM", "close": "7:00 PM" },
+    "tuesday": { "open": "9:00 AM", "close": "7:00 PM" },
+    "wednesday": { "open": "9:00 AM", "close": "7:00 PM" },
+    "thursday": { "open": "9:00 AM", "close": "8:00 PM" },
+    "friday": { "open": "9:00 AM", "close": "8:00 PM" },
+    "saturday": { "open": "8:00 AM", "close": "5:00 PM" },
+    "sunday": "closed"
+  },
+  "services": [
+    { "name": "Regular Haircut", "duration": 30, "price": 25, "description": "Classic men's haircut with clippers and scissors" },
+    { "name": "Fade", "duration": 35, "price": 30, "description": "Skin fade, mid fade, or high fade" },
+    { "name": "Beard Trim", "duration": 15, "price": 15, "description": "Shape up and trim your beard" },
+    { "name": "Haircut + Beard", "duration": 45, "price": 38, "description": "Full haircut and beard trim combo" },
+    { "name": "Kids Cut (12 & under)", "duration": 20, "price": 18, "description": "Haircut for children 12 and under" },
+    { "name": "Hot Towel Shave", "duration": 30, "price": 30, "description": "Traditional straight razor shave with hot towel" },
+    { "name": "Line Up", "duration": 15, "price": 12, "description": "Edge up and shape hairline" }
+  ],
+  "staff": [
+    { "name": "Marcus", "role": "Owner / Master Barber", "specialties": ["fades", "designs", "hot towel shave"] },
+    { "name": "DeShawn", "role": "Senior Barber", "specialties": ["fades", "beard sculpting"] },
+    { "name": "Tony", "role": "Barber", "specialties": ["classic cuts", "kids cuts"] }
+  ],
+  "policies": {
+    "cancellation": "Please cancel at least 2 hours in advance",
+    "lateness": "More than 15 minutes late may need to reschedule",
+    "payment": ["cash", "card", "Apple Pay", "Cash App"]
+  },
+  "personality": "Friendly, warm, and professional. Speaks naturally like a real receptionist. Uses casual but polite language. Keeps responses concise for phone conversation."
+}
