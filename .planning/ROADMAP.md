@@ -52,10 +52,10 @@ Plans:
   3. Audio conversion handles concurrent calls without blocking event loop
   4. Test harness validates round-trip conversion (mulaw → PCM → mulaw) produces intelligible audio
 
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 02-01: TBD during planning
+- [ ] 02-01-PLAN.md — TDD audio conversion module (mulaw↔PCM, resample)
 
 ### Phase 3: STT Migration
 **Goal**: Real-time speech transcription via AWS Transcribe Streaming with EventEmitter interface preserved
