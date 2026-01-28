@@ -1,63 +1,6 @@
 import { env } from '../config/env';
 import { EventEmitter } from 'events';
-
-/**
- * Linear16 PCM → G.711 μ-law conversion
- * Input: 16-bit signed PCM samples
- * Output: 8-bit μ-law encoded samples
- */
-function pcmToMulaw(pcmBuffer: Buffer): Buffer {
-  const BIAS = 0x84;
-  const CLIP = 32635;
-  const mulaw = Buffer.alloc(pcmBuffer.length / 2);
-
-  for (let i = 0; i < pcmBuffer.length; i += 2) {
-    let sample = pcmBuffer.readInt16LE(i);
-
-    const sign = (sample >> 8) & 0x80;
-    if (sign !== 0) sample = -sample;
-    if (sample > CLIP) sample = CLIP;
-    sample = sample + BIAS;
-
-    let exponent = 7;
-    let mask = 0x4000;
-    for (; exponent > 0; exponent--) {
-      if ((sample & mask) !== 0) break;
-      mask >>= 1;
-    }
-
-    const mantissa = (sample >> (exponent + 3)) & 0x0f;
-    const mulawByte = ~(sign | (exponent << 4) | mantissa) & 0xff;
-    mulaw[i / 2] = mulawByte;
-  }
-
-  return mulaw;
-}
-
-/**
- * Resample PCM audio from one sample rate to another (simple linear interpolation)
- */
-function resamplePCM(input: Buffer, fromRate: number, toRate: number): Buffer {
-  if (fromRate === toRate) return input;
-
-  const ratio = fromRate / toRate;
-  const inputSamples = input.length / 2;
-  const outputSamples = Math.floor(inputSamples / ratio);
-  const output = Buffer.alloc(outputSamples * 2);
-
-  for (let i = 0; i < outputSamples; i++) {
-    const srcPos = i * ratio;
-    const srcIndex = Math.floor(srcPos);
-    const frac = srcPos - srcIndex;
-
-    const s0 = input.readInt16LE(Math.min(srcIndex, inputSamples - 1) * 2);
-    const s1 = input.readInt16LE(Math.min(srcIndex + 1, inputSamples - 1) * 2);
-    const sample = Math.round(s0 + (s1 - s0) * frac);
-    output.writeInt16LE(Math.max(-32768, Math.min(32767, sample)), i * 2);
-  }
-
-  return output;
-}
+import { pcmToMulaw, resamplePcm } from './audio-convert';
 
 export class TTSService extends EventEmitter {
   private abortController: AbortController | null = null;
@@ -147,7 +90,7 @@ export class TTSService extends EventEmitter {
         pcmBuffer = pcmBuffer.subarray(CHUNK_SIZE);
 
         // Resample 24kHz → 8kHz, then convert to mulaw
-        const resampled = resamplePCM(chunk, 24000, 8000);
+        const resampled = resamplePcm(chunk, 24000, 8000);
         const mulaw = pcmToMulaw(resampled);
         this.emit('audio', mulaw);
       }
@@ -155,7 +98,7 @@ export class TTSService extends EventEmitter {
 
     // Process remaining samples
     if (pcmBuffer.length >= 2) {
-      const resampled = resamplePCM(pcmBuffer, 24000, 8000);
+      const resampled = resamplePcm(pcmBuffer, 24000, 8000);
       const mulaw = pcmToMulaw(resampled);
       this.emit('audio', mulaw);
     }
