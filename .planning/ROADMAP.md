@@ -34,10 +34,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Bedrock, Transcribe, and Polly SDK clients instantiate without authentication errors
   4. Claude 3.5 model available in selected region (verified via Bedrock API)
 
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 01-01: TBD during planning
+- [ ] 01-01-PLAN.md — AWS SDK install, env config, and client factory module
 
 ### Phase 2: Audio Pipeline Foundation
 **Goal**: Audio format conversion working bidirectionally for Twilio compatibility
@@ -138,7 +138,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Infrastructure Setup | 0/TBD | Not started | - |
+| 1. Infrastructure Setup | 0/1 | Planned | - |
 | 2. Audio Pipeline Foundation | 0/TBD | Not started | - |
 | 3. STT Migration | 0/TBD | Not started | - |
 | 4. TTS Migration | 0/TBD | Not started | - |
