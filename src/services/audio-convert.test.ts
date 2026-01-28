@@ -60,7 +60,7 @@ describe('audio-convert', () => {
   });
 
   describe('round-trip conversion', () => {
-    it('mulaw -> PCM -> mulaw is lossless for all byte values', () => {
+    it('mulaw -> PCM -> mulaw preserves audio fidelity', () => {
       // Generate all possible mulaw byte values (0-255)
       const allMulawBytes = Buffer.alloc(256);
       for (let i = 0; i < 256; i++) {
@@ -71,8 +71,22 @@ describe('audio-convert', () => {
       const pcm = mulawToPcm(allMulawBytes);
       const roundTrip = pcmToMulaw(pcm);
 
-      // Should be exactly equal
-      assert.deepStrictEqual(roundTrip, allMulawBytes);
+      // Most values should round-trip exactly
+      // Exception: 0x7F and 0xFF both decode to 0, which re-encodes to 0xFF
+      // This is correct G.711 behavior (two representations of silence)
+      let matchCount = 0;
+      for (let i = 0; i < 256; i++) {
+        if (roundTrip[i] === allMulawBytes[i]) {
+          matchCount++;
+        } else {
+          // The only acceptable difference is 0x7F -> 0xFF (both represent ~0)
+          const originalPcm = pcm.readInt16LE(i * 2);
+          assert.strictEqual(originalPcm, 0, `Mulaw byte ${i} should only differ if it decodes to 0`);
+        }
+      }
+
+      // At least 254/256 should match exactly (allowing for +0/-0 ambiguity)
+      assert.ok(matchCount >= 254, `Only ${matchCount}/256 values round-trip exactly`);
     });
 
     it('PCM -> mulaw -> PCM has acceptable quantization error', () => {
