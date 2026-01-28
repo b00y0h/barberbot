@@ -12,7 +12,7 @@ This roadmap guides the migration from third-party AI services (OpenAI, Deepgram
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Infrastructure Setup** - AWS credentials, region selection, SDK configuration
+- [x] **Phase 1: Infrastructure Setup** - AWS credentials, region selection, SDK configuration
 - [ ] **Phase 2: Audio Pipeline Foundation** - mulaw↔PCM conversion for Twilio compatibility
 - [ ] **Phase 3: STT Migration** - Deepgram → AWS Transcribe Streaming
 - [ ] **Phase 4: TTS Migration** - ElevenLabs/Deepgram → Amazon Polly
@@ -37,7 +37,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — AWS SDK install, env config, and client factory module
+- [x] 01-01-PLAN.md — AWS SDK install, env config, and client factory module
 
 ### Phase 2: Audio Pipeline Foundation
 **Goal**: Audio format conversion working bidirectionally for Twilio compatibility
@@ -138,7 +138,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Infrastructure Setup | 0/1 | Planned | - |
+| 1. Infrastructure Setup | 1/1 | ✓ Complete | 2026-01-28 |
 | 2. Audio Pipeline Foundation | 0/TBD | Not started | - |
 | 3. STT Migration | 0/TBD | Not started | - |
 | 4. TTS Migration | 0/TBD | Not started | - |
@@ -147,4 +147,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 ---
 *Roadmap created: 2026-01-28*
-*Last updated: 2026-01-28 after initial creation*
+*Last updated: 2026-01-28 after Phase 1 execution*

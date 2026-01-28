@@ -9,8 +9,8 @@ Requirements for AWS migration milestone. Each maps to roadmap phases.
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: AWS IAM credentials (access key + secret key) configured via environment variables
-- [ ] **INFRA-02**: AWS region configured for latency-optimized Bedrock inference
+- [x] **INFRA-01**: AWS IAM credentials (access key + secret key) configured via environment variables
+- [x] **INFRA-02**: AWS region configured for latency-optimized Bedrock inference
 - [ ] **INFRA-03**: Old provider SDK dependencies removed (openai, @deepgram/sdk)
 - [ ] **INFRA-04**: Old provider environment variables removed (OPENAI_API_KEY, DEEPGRAM_API_KEY, ELEVENLABS_API_KEY)
 
@@ -71,8 +71,8 @@ Deferred to future milestones.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | Phase 1 | Pending |
-| INFRA-02 | Phase 1 | Pending |
+| INFRA-01 | Phase 1 | Complete |
+| INFRA-02 | Phase 1 | Complete |
 | AUDIO-01 | Phase 2 | Pending |
 | AUDIO-02 | Phase 2 | Pending |
 | AUDIO-03 | Phase 2 | Pending |
@@ -102,4 +102,4 @@ Deferred to future milestones.
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-28 after roadmap creation*
+*Last updated: 2026-01-28 after Phase 1 execution*
