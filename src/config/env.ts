@@ -21,6 +21,11 @@ export interface EnvConfig {
   openai: {
     apiKey: string;
   };
+  aws: {
+    accessKeyId: string;
+    secretAccessKey: string;
+    region: string;
+  };
   databasePath: string;
 }
 
@@ -50,6 +55,11 @@ export const env: EnvConfig = {
   },
   openai: {
     apiKey: required('OPENAI_API_KEY'),
+  },
+  aws: {
+    accessKeyId: required('AWS_ACCESS_KEY_ID'),
+    secretAccessKey: required('AWS_SECRET_ACCESS_KEY'),
+    region: process.env.AWS_REGION || 'us-east-2',
   },
   databasePath: process.env.DATABASE_PATH || './data/barberbot.db',
 };
