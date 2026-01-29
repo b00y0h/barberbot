@@ -70,10 +70,11 @@ Plans:
   3. AWSTranscribeSTT class emits same events as DeepgramSTT (transcript, utterance_end, error, close)
   4. CallManager orchestration continues working without changes (same EventEmitter API)
 
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 03-01: TBD during planning
+- [ ] 03-01-PLAN.md — TDD AWSTranscribeSTT class with EventEmitter interface
+- [ ] 03-02-PLAN.md — Wire AWSTranscribeSTT into CallManager
 
 ### Phase 4: TTS Migration
 **Goal**: Natural voice responses via Amazon Polly with streaming audio delivery
@@ -140,11 +141,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Infrastructure Setup | 1/1 | ✓ Complete | 2026-01-28 |
 | 2. Audio Pipeline Foundation | 1/1 | ✓ Complete | 2026-01-29 |
-| 3. STT Migration | 0/TBD | Not started | - |
+| 3. STT Migration | 0/2 | Planning complete | - |
 | 4. TTS Migration | 0/TBD | Not started | - |
 | 5. LLM Migration | 0/TBD | Not started | - |
 | 6. Integration & Cleanup | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-28*
-*Last updated: 2026-01-29 after Phase 2 execution*
+*Last updated: 2026-01-29 after Phase 3 planning*
