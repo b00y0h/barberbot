@@ -12,7 +12,7 @@ import {
   updateCallRecord,
   findCustomerByPhone,
 } from './customers';
-import { DeepgramSTT } from './stt';
+import { AWSTranscribeSTT } from './aws-transcribe-stt';
 import { TTSService } from './tts';
 
 export interface ActiveCall {
@@ -21,7 +21,7 @@ export interface ActiveCall {
   phoneNumber: string;
   direction: 'inbound' | 'outbound';
   conversation: ConversationState;
-  stt: DeepgramSTT;
+  stt: AWSTranscribeSTT;
   tts: TTSService;
   streamSid: string | null;
   startedAt: Date;
@@ -62,7 +62,7 @@ export async function initializeCall(
   const conversation = createConversation(phoneNumber);
 
   // Initialize STT & TTS
-  const stt = new DeepgramSTT();
+  const stt = new AWSTranscribeSTT();
   const tts = new TTSService();
 
   const call: ActiveCall = {
