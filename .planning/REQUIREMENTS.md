@@ -16,9 +16,9 @@ Requirements for AWS migration milestone. Each maps to roadmap phases.
 
 ### Audio
 
-- [ ] **AUDIO-01**: mulaw 8kHz → PCM conversion for STT input from Twilio
-- [ ] **AUDIO-02**: PCM → mulaw 8kHz conversion for TTS output to Twilio
-- [ ] **AUDIO-03**: Audio conversion works with concurrent calls without blocking
+- [x] **AUDIO-01**: mulaw 8kHz → PCM conversion for STT input from Twilio
+- [x] **AUDIO-02**: PCM → mulaw 8kHz conversion for TTS output to Twilio
+- [x] **AUDIO-03**: Audio conversion works with concurrent calls without blocking
 
 ### STT
 
@@ -73,9 +73,9 @@ Deferred to future milestones.
 |-------------|-------|--------|
 | INFRA-01 | Phase 1 | Complete |
 | INFRA-02 | Phase 1 | Complete |
-| AUDIO-01 | Phase 2 | Pending |
-| AUDIO-02 | Phase 2 | Pending |
-| AUDIO-03 | Phase 2 | Pending |
+| AUDIO-01 | Phase 2 | Complete |
+| AUDIO-02 | Phase 2 | Complete |
+| AUDIO-03 | Phase 2 | Complete |
 | STT-01 | Phase 3 | Pending |
 | STT-02 | Phase 3 | Pending |
 | STT-03 | Phase 3 | Pending |
@@ -102,4 +102,4 @@ Deferred to future milestones.
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-28 after Phase 1 execution*
+*Last updated: 2026-01-29 after Phase 2 execution*
