@@ -13,7 +13,7 @@ import {
   findCustomerByPhone,
 } from './customers';
 import { AWSTranscribeSTT } from './aws-transcribe-stt';
-import { TTSService } from './tts';
+import { AWSPollyTTS } from './aws-polly-tts';
 
 export interface ActiveCall {
   id: string;
@@ -22,7 +22,7 @@ export interface ActiveCall {
   direction: 'inbound' | 'outbound';
   conversation: ConversationState;
   stt: AWSTranscribeSTT;
-  tts: TTSService;
+  tts: AWSPollyTTS;
   streamSid: string | null;
   startedAt: Date;
   isBotSpeaking: boolean;
@@ -63,7 +63,7 @@ export async function initializeCall(
 
   // Initialize STT & TTS
   const stt = new AWSTranscribeSTT();
-  const tts = new TTSService();
+  const tts = new AWSPollyTTS();
 
   const call: ActiveCall = {
     id: uuid(),
@@ -167,7 +167,7 @@ async function speakResponse(call: ActiveCall, text: string): Promise<void> {
   let sequenceNumber = 0;
 
   return new Promise<void>((resolve) => {
-    const tts = new TTSService();
+    const tts = new AWSPollyTTS();
 
     tts.on('audio', (mulawChunk: Buffer) => {
       if (!call.isBotSpeaking) return; // interrupted
