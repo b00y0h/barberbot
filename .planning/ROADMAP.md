@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Infrastructure Setup** - AWS credentials, region selection, SDK configuration
 - [x] **Phase 2: Audio Pipeline Foundation** - mulaw↔PCM conversion for Twilio compatibility
-- [ ] **Phase 3: STT Migration** - Deepgram → AWS Transcribe Streaming
+- [x] **Phase 3: STT Migration** - Deepgram → AWS Transcribe Streaming
 - [ ] **Phase 4: TTS Migration** - ElevenLabs/Deepgram → Amazon Polly
 - [ ] **Phase 5: LLM Migration** - OpenAI → AWS Bedrock Claude with tool calling
 - [ ] **Phase 6: Integration & Cleanup** - End-to-end validation and legacy removal
@@ -75,7 +75,7 @@ Plans:
 Plans:
 - [x] 03-01-PLAN.md — TDD AWSTranscribeSTT class with EventEmitter interface
 - [x] 03-02-PLAN.md — Wire AWSTranscribeSTT into CallManager
-- [ ] 03-03-PLAN.md — Gap closure: Implement utterance_end detection
+- [x] 03-03-PLAN.md — Gap closure: Implement utterance_end detection
 
 ### Phase 4: TTS Migration
 **Goal**: Natural voice responses via Amazon Polly with streaming audio delivery
@@ -142,11 +142,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Infrastructure Setup | 1/1 | ✓ Complete | 2026-01-28 |
 | 2. Audio Pipeline Foundation | 1/1 | ✓ Complete | 2026-01-29 |
-| 3. STT Migration | 2/3 | Gap closure planned | - |
+| 3. STT Migration | 3/3 | ✓ Complete | 2026-01-30 |
 | 4. TTS Migration | 0/TBD | Not started | - |
 | 5. LLM Migration | 0/TBD | Not started | - |
 | 6. Integration & Cleanup | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-28*
-*Last updated: 2026-01-29 after Phase 3 gap closure planning*
+*Last updated: 2026-01-30 after Phase 3 completion*

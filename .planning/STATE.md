@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Callers can have a natural phone conversation with the bot and book an appointment without human intervention.
-**Current focus:** Phase 3 - STT Migration (COMPLETE)
+**Current focus:** Phase 4 - TTS Migration
 
 ## Current Position
 
-Phase: 3 of 6 (STT Migration)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-01-29 — Completed 03-02-PLAN.md (CallManager STT Integration)
+Phase: 4 of 6 (TTS Migration)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-01-30 — Completed Phase 3 (STT Migration)
 
-Progress: [████░░░░░░] 40%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 2.5 min
-- Total execution time: 0.17 hours
+- Total plans completed: 5
+- Average duration: 2.6 min
+- Total execution time: 0.22 hours
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [████░░░░░░] 40%
 |-------|-------|-------|----------|
 | 01-infrastructure-setup | 1 | 4min | 4min |
 | 02-audio-pipeline-foundation | 1 | 3min | 3min |
-| 03-stt-migration | 2 | 3min | 1.5min |
+| 03-stt-migration | 3 | 6min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (4min), 02-01 (3min), 03-01 (2min), 03-02 (1min)
-- Trend: Faster (integration tasks faster than new code creation)
+- Last 5 plans: 02-01 (3min), 03-01 (2min), 03-02 (1min), 03-03 (3min)
+- Trend: Consistent (gap closure similar to initial implementation)
 
 *Updated after each plan completion*
 
@@ -52,6 +52,7 @@ Recent decisions affecting current work:
 - Filler word filtering (um, uh, like) built into AWSTranscribeSTT
 - High partial result stability for cleaner transcript updates
 - EventEmitter interface for STT provider abstraction (enables future swaps)
+- 300ms debounce for utterance_end detection (responsive yet stable)
 
 ### Pending Todos
 
@@ -65,6 +66,6 @@ Human verification needed for Phase 1:
 
 ## Session Continuity
 
-Last session: 2026-01-29
-Stopped at: Completed 03-02-PLAN.md (Phase 3 complete)
+Last session: 2026-01-30
+Stopped at: Completed Phase 3 (STT Migration with gap closure)
 Resume file: None

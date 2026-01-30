@@ -22,10 +22,10 @@ Requirements for AWS migration milestone. Each maps to roadmap phases.
 
 ### STT
 
-- [ ] **STT-01**: Real-time streaming transcription via AWS Transcribe Streaming
-- [ ] **STT-02**: Utterance/endpoint detection triggers transcript events
-- [ ] **STT-03**: EventEmitter interface preserved (transcript, utterance_end, error, close events)
-- [ ] **STT-04**: Handles connection lifecycle (connect, send audio, close)
+- [x] **STT-01**: Real-time streaming transcription via AWS Transcribe Streaming
+- [x] **STT-02**: Utterance/endpoint detection triggers transcript events
+- [x] **STT-03**: EventEmitter interface preserved (transcript, utterance_end, error, close events)
+- [x] **STT-04**: Handles connection lifecycle (connect, send audio, close)
 
 ### TTS
 
@@ -76,10 +76,10 @@ Deferred to future milestones.
 | AUDIO-01 | Phase 2 | Complete |
 | AUDIO-02 | Phase 2 | Complete |
 | AUDIO-03 | Phase 2 | Complete |
-| STT-01 | Phase 3 | Pending |
-| STT-02 | Phase 3 | Pending |
-| STT-03 | Phase 3 | Pending |
-| STT-04 | Phase 3 | Pending |
+| STT-01 | Phase 3 | Complete |
+| STT-02 | Phase 3 | Complete |
+| STT-03 | Phase 3 | Complete |
+| STT-04 | Phase 3 | Complete |
 | TTS-01 | Phase 4 | Pending |
 | TTS-02 | Phase 4 | Pending |
 | TTS-03 | Phase 4 | Pending |
@@ -102,4 +102,4 @@ Deferred to future milestones.
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-29 after Phase 2 execution*
+*Last updated: 2026-01-30 after Phase 3 completion*
