@@ -221,4 +221,11 @@ describe('bedrock-conversation', () => {
       assert.strictEqual(typeof module.processUserMessageStreaming, 'function');
     });
   });
+
+  describe('generateCallSummary()', () => {
+    it('exports generateCallSummary function', async () => {
+      const module = await import('./bedrock-conversation');
+      assert.strictEqual(typeof module.generateCallSummary, 'function');
+    });
+  });
 });

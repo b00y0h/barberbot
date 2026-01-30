@@ -5,7 +5,7 @@ import {
   ContentBlock,
   Message,
 } from '@aws-sdk/client-bedrock-runtime';
-import { getBedrockRuntimeClient, BEDROCK_MODEL_CONVERSATION } from './bedrock-client';
+import { getBedrockRuntimeClient, BEDROCK_MODEL_CONVERSATION, BEDROCK_MODEL_SUMMARY } from './bedrock-client';
 import { bedrockTools, BedrockMessage, ToolUseBlock, ToolResultBlock } from './bedrock-tools';
 import { getBusinessProfile } from '../config/business';
 import { buildSystemPrompt } from '../prompts/system';
@@ -534,4 +534,66 @@ export function getTranscript(state: ConversationState): string {
   }
 
   return lines.join('\n');
+}
+
+/**
+ * Generate a summary of the call using Claude Haiku (faster/cheaper)
+ * Non-streaming since this is post-call processing
+ */
+export async function generateCallSummary(state: ConversationState): Promise<string> {
+  try {
+    // Build transcript from user/assistant text messages only
+    const transcript = state.messages
+      .map(message => {
+        // Find text content (skip tool_use and tool_result blocks)
+        const textBlock = message.content.find(
+          (block): block is { text: string } =>
+            'text' in block && typeof (block as { text?: string }).text === 'string'
+        );
+
+        if (textBlock?.text) {
+          const speaker = message.role === 'user' ? 'Caller' : 'Bot';
+          return `${speaker}: ${textBlock.text}`;
+        }
+        return null;
+      })
+      .filter((line): line is string => line !== null)
+      .join('\n');
+
+    if (!transcript.trim()) {
+      return 'No conversation to summarize';
+    }
+
+    const client = getBedrockRuntimeClient();
+
+    const response = await client.send(
+      new ConverseCommand({
+        modelId: BEDROCK_MODEL_SUMMARY,
+        messages: [
+          {
+            role: 'user',
+            content: [{ text: transcript }],
+          },
+        ],
+        system: [
+          {
+            text: 'Summarize this phone call transcript in 2-3 sentences. Include: caller intent, outcome, and any action items.',
+          },
+        ],
+        inferenceConfig: {
+          maxTokens: 200,
+          temperature: 0.3,
+        },
+      })
+    );
+
+    const summaryText = response.output?.message?.content?.find(
+      (block): block is ContentBlock.TextMember => 'text' in block
+    )?.text;
+
+    return summaryText || 'No summary available';
+  } catch (err) {
+    console.error('[Bedrock] Error generating summary:', err);
+    return 'Summary generation failed';
+  }
 }
