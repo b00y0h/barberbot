@@ -182,4 +182,43 @@ describe('bedrock-conversation', () => {
       assert.strictEqual(typeof state.leadCaptured, 'boolean');
     });
   });
+
+  describe('detectSentenceBoundary()', () => {
+    it('detects period as sentence boundary', async () => {
+      const module = await import('./bedrock-conversation');
+      assert.strictEqual(module.detectSentenceBoundary('Hello.'), true);
+      assert.strictEqual(module.detectSentenceBoundary('Hello. '), true);
+    });
+
+    it('detects question mark as sentence boundary', async () => {
+      const module = await import('./bedrock-conversation');
+      assert.strictEqual(module.detectSentenceBoundary('How are you?'), true);
+      assert.strictEqual(module.detectSentenceBoundary('What? '), true);
+    });
+
+    it('detects exclamation mark as sentence boundary', async () => {
+      const module = await import('./bedrock-conversation');
+      assert.strictEqual(module.detectSentenceBoundary('Wow!'), true);
+      assert.strictEqual(module.detectSentenceBoundary('Great! '), true);
+    });
+
+    it('returns false for incomplete sentences', async () => {
+      const module = await import('./bedrock-conversation');
+      assert.strictEqual(module.detectSentenceBoundary('Hello'), false);
+      assert.strictEqual(module.detectSentenceBoundary('How are'), false);
+      assert.strictEqual(module.detectSentenceBoundary('I am'), false);
+    });
+
+    it('handles empty string', async () => {
+      const module = await import('./bedrock-conversation');
+      assert.strictEqual(module.detectSentenceBoundary(''), false);
+    });
+  });
+
+  describe('processUserMessageStreaming()', () => {
+    it('exports processUserMessageStreaming function', async () => {
+      const module = await import('./bedrock-conversation');
+      assert.strictEqual(typeof module.processUserMessageStreaming, 'function');
+    });
+  });
 });

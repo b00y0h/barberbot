@@ -1,5 +1,6 @@
 import {
   ConverseCommand,
+  ConverseStreamCommand,
   ConversationRole,
   ContentBlock,
   Message,
@@ -324,6 +325,188 @@ export async function processUserMessage(
       return text;
     } catch (err) {
       console.error('[Bedrock] Error processing message:', err);
+      break;
+    }
+  }
+
+  return "I'm sorry, I'm having a bit of trouble. Could you repeat that?";
+}
+
+/**
+ * Detect if text ends with a sentence boundary
+ * Used for streaming TTS - send complete sentences
+ */
+export function detectSentenceBoundary(text: string): boolean {
+  return /[.!?]\s*$/.test(text);
+}
+
+/**
+ * Process user message with streaming response
+ * Calls onSentence callback for each complete sentence (for TTS)
+ * Returns full accumulated text
+ */
+export async function processUserMessageStreaming(
+  state: ConversationState,
+  userText: string,
+  callerPhone: string,
+  onSentence: (sentence: string) => void
+): Promise<string> {
+  // Add user message to history
+  state.messages.push({
+    role: 'user',
+    content: [{ text: userText }],
+  });
+
+  const client = getBedrockRuntimeClient();
+  let attempts = 0;
+  const maxAttempts = 5;
+
+  while (attempts < maxAttempts) {
+    attempts++;
+
+    try {
+      const response = await client.send(
+        new ConverseStreamCommand({
+          modelId: BEDROCK_MODEL_CONVERSATION,
+          messages: state.messages as Message[],
+          system: [{ text: state.systemPrompt }],
+          toolConfig: { tools: bedrockTools },
+          inferenceConfig: {
+            maxTokens: 200,
+            temperature: 0.7,
+          },
+        })
+      );
+
+      // Accumulate streaming response
+      let fullText = '';
+      let currentSentence = '';
+      let stopReason = '';
+
+      // Tool use accumulation
+      const toolUseBlocks: Array<{
+        toolUseId: string;
+        name: string;
+        input: unknown;
+      }> = [];
+      let currentToolUse: {
+        toolUseId?: string;
+        name?: string;
+        input: string;
+      } | null = null;
+
+      for await (const chunk of response.stream!) {
+        if ('messageStart' in chunk) {
+          // Message started
+        } else if ('contentBlockStart' in chunk) {
+          const start = chunk.contentBlockStart?.start;
+          if (start && 'toolUse' in start) {
+            currentToolUse = {
+              toolUseId: start.toolUse!.toolUseId,
+              name: start.toolUse!.name,
+              input: '',
+            };
+          }
+        } else if ('contentBlockDelta' in chunk) {
+          const delta = chunk.contentBlockDelta?.delta;
+
+          if (delta && 'text' in delta) {
+            const textChunk = delta.text || '';
+            fullText += textChunk;
+            currentSentence += textChunk;
+
+            // Check for sentence boundary
+            if (detectSentenceBoundary(currentSentence)) {
+              onSentence(currentSentence.trim());
+              currentSentence = '';
+            }
+          } else if (delta && 'toolUse' in delta) {
+            // Accumulate tool input JSON chunks
+            if (currentToolUse) {
+              currentToolUse.input += delta.toolUse?.input || '';
+            }
+          }
+        } else if ('contentBlockStop' in chunk) {
+          if (currentToolUse) {
+            // Parse accumulated tool input
+            try {
+              const parsedInput = JSON.parse(currentToolUse.input);
+              toolUseBlocks.push({
+                toolUseId: currentToolUse.toolUseId!,
+                name: currentToolUse.name!,
+                input: parsedInput,
+              });
+            } catch (e) {
+              console.error('[Bedrock] Failed to parse tool input (max_tokens?):', e);
+            }
+            currentToolUse = null;
+          }
+        } else if ('messageStop' in chunk) {
+          stopReason = chunk.messageStop?.stopReason || '';
+        }
+      }
+
+      // Send any remaining partial sentence
+      if (currentSentence.trim()) {
+        onSentence(currentSentence.trim());
+      }
+
+      // Build assistant message content for history
+      const assistantContent: Array<{ text: string } | ToolUseBlock> = [];
+      if (fullText) {
+        assistantContent.push({ text: fullText });
+      }
+      for (const tool of toolUseBlocks) {
+        assistantContent.push({
+          toolUse: {
+            toolUseId: tool.toolUseId,
+            name: tool.name,
+            input: tool.input as Record<string, unknown>,
+          },
+        });
+      }
+
+      // Only add to history if we have content
+      if (assistantContent.length > 0) {
+        state.messages.push({
+          role: 'assistant',
+          content: assistantContent,
+        });
+      }
+
+      // Handle tool calls
+      if (stopReason === 'tool_use' && toolUseBlocks.length > 0) {
+        const toolResults: ToolResultBlock[] = [];
+        for (const tool of toolUseBlocks) {
+          const result = handleToolCall(
+            tool.name,
+            tool.input as Record<string, unknown>,
+            state,
+            callerPhone
+          );
+
+          toolResults.push({
+            toolResult: {
+              toolUseId: tool.toolUseId,
+              content: [{ json: result }],
+            },
+          });
+        }
+
+        // Add tool results as user message
+        state.messages.push({
+          role: 'user',
+          content: toolResults,
+        });
+
+        // Continue loop to get final text response
+        continue;
+      }
+
+      // No tools — return accumulated text
+      return fullText || "I'm sorry, could you repeat that?";
+    } catch (err) {
+      console.error('[Bedrock] Error processing streaming message:', err);
       break;
     }
   }
