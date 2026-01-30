@@ -1,20 +1,20 @@
 {
   "name": "barberbot",
   "version": "1.0.0",
-  "description": "AI-powered voice bot agent for barber shop reception — handles inbound/outbound calls via Twilio, Deepgram STT, OpenAI LLM, and ElevenLabs TTS",
+  "description": "AI-powered voice bot agent for barber shop reception — handles inbound/outbound calls via Twilio, AWS Transcribe STT, AWS Bedrock LLM, and AWS Polly TTS",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
     "seed": "tsx scripts/seed-db.ts",
-    "test-call": "tsx scripts/test-call.ts"
+    "test-call": "tsx scripts/test-call.ts",
+    "test": "node --import tsx --test 'src/**/*.test.ts'"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.975.0",
     "@aws-sdk/client-polly": "^3.975.0",
     "@aws-sdk/client-transcribe-streaming": "^3.975.0",
-    "@deepgram/sdk": "^3.0.0",
     "better-sqlite3": "^11.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.0",

@@ -1,15 +1,28 @@
-import express from 'express';
-import cors from 'cors';
-import { createServer } from 'http';
-import { WebSocketServer } from 'ws';
-import path from 'path';
+import express from "express";
+import cors from "cors";
+import { createServer } from "http";
+import { WebSocketServer } from "ws";
+import path from "path";
 
-import { env } from './config/env';
-import { loadBusinessProfile } from './config/business';
-import { getDatabase, closeDatabase } from './database';
-import { handleMediaStream } from './services/audio-pipeline';
-import voiceRoutes from './routes/voice';
-import adminRoutes from './routes/admin';
+import { env, validateNoLegacyProviders } from "./config/env";
+import { loadBusinessProfile } from "./config/business";
+import { getDatabase, closeDatabase } from "./database";
+import { handleMediaStream } from "./services/audio-pipeline";
+import voiceRoutes from "./routes/voice";
+import adminRoutes from "./routes/admin";
+
+// Validate no legacy provider env vars are set
+const legacyErrors = validateNoLegacyProviders();
+if (legacyErrors.length > 0) {
+  console.error("Configuration Error:");
+  for (const error of legacyErrors) {
+    console.error(`  - ${error}`);
+  }
+  console.error(
+    "\nThis system uses AWS services exclusively. Remove legacy environment variables.",
+  );
+  process.exit(1);
+}
 
 const app = express();
 
@@ -17,15 +30,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-app.use('/voice', voiceRoutes);
-app.use('/api', adminRoutes);
+app.use("/voice", voiceRoutes);
+app.use("/api", adminRoutes);
 
 // Serve dashboard at root
-app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Initialize
@@ -35,8 +48,8 @@ const db = getDatabase();
 const server = createServer(app);
 
 // WebSocket server for Twilio Media Streams
-const wss = new WebSocketServer({ server, path: '/voice/stream' });
-wss.on('connection', (ws, req) => {
+const wss = new WebSocketServer({ server, path: "/voice/stream" });
+wss.on("connection", (ws, req) => {
   handleMediaStream(ws, req);
 });
 
@@ -55,14 +68,14 @@ server.listen(env.port, () => {
 
 // Graceful shutdown
 const shutdown = () => {
-  console.log('\n[Server] Shutting down...');
+  console.log("\n[Server] Shutting down...");
   closeDatabase();
   server.close(() => {
-    console.log('[Server] Closed');
+    console.log("[Server] Closed");
     process.exit(0);
   });
   setTimeout(() => process.exit(1), 5000);
 };
 
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown);
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
