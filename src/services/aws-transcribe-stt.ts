@@ -31,6 +31,8 @@ export class AWSTranscribeSTT extends EventEmitter {
     resolve: (value: void) => void;
     reject: (err: Error) => void;
   } | null = null;
+  private utteranceEndTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly UTTERANCE_END_DEBOUNCE_MS = 300;
 
   /**
    * Start the AWS Transcribe streaming connection
@@ -103,6 +105,12 @@ export class AWSTranscribeSTT extends EventEmitter {
     this.isStopped = true;
     this.isStreaming = false;
 
+    // Clear utterance end timer to prevent memory leaks
+    if (this.utteranceEndTimer) {
+      clearTimeout(this.utteranceEndTimer);
+      this.utteranceEndTimer = null;
+    }
+
     // Signal the audio generator to stop
     if (this.streamController) {
       this.streamController.resolve();
@@ -111,6 +119,31 @@ export class AWSTranscribeSTT extends EventEmitter {
 
     console.log('[AWS] Transcribe connection closed');
     this.emit('close');
+  }
+
+  /**
+   * Handle final transcript result - triggers utterance end detection
+   * Called internally when AWS sends a final (non-partial) transcript result.
+   * Uses debouncing to detect natural speech boundaries.
+   * @param transcript - The final transcript text
+   */
+  handleFinalTranscript(transcript: string): void {
+    if (!transcript || transcript.trim().length === 0) {
+      return;
+    }
+
+    // Clear any existing timer - each new final resets the debounce
+    if (this.utteranceEndTimer) {
+      clearTimeout(this.utteranceEndTimer);
+    }
+
+    // Start new timer - utterance_end fires after silence (no new finals)
+    this.utteranceEndTimer = setTimeout(() => {
+      if (!this.isStopped) {
+        this.emit('utterance_end');
+      }
+      this.utteranceEndTimer = null;
+    }, this.UTTERANCE_END_DEBOUNCE_MS);
   }
 
   /**
@@ -167,17 +200,11 @@ export class AWSTranscribeSTT extends EventEmitter {
                 }
               }
 
-              // Track for utterance end detection
+              // Trigger utterance end detection on final results
               if (isFinal && transcript.trim().length > 0) {
                 lastTranscript = transcript;
+                this.handleFinalTranscript(transcript);
               }
-            }
-
-            // Detect utterance end (EndOfSegment in AWS Transcribe)
-            if (result.IsPartial === false && result.EndTime) {
-              // Check if this looks like end of utterance
-              // AWS doesn't have explicit utterance_end, so we use result finalization
-              // Combined with silence detection in the audio
             }
           }
         }
