@@ -145,6 +145,21 @@ describe('AWSTranscribeSTT', () => {
   });
 
   describe('integration behavior', () => {
+    it('emits utterance_end after final transcript with silence', (t, done) => {
+      const stt = new AWSTranscribeSTT();
+
+      stt.on('utterance_end', () => {
+        done();
+      });
+
+      // Simulate receiving a final transcript result
+      // The utterance_end should fire after the debounce period
+      (stt as any).handleFinalTranscript('hello world');
+
+      // If handleFinalTranscript doesn't exist yet, this will fail
+      // which is exactly what we want for RED phase
+    });
+
     it('transcript event provides text and isFinal flag', (t, done) => {
       const stt = new AWSTranscribeSTT();
 
