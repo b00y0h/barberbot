@@ -259,14 +259,6 @@ describe('Bedrock Conversation Integration', () => {
       );
     });
 
-    it('conversation.ts has deprecation notice', async () => {
-      const { readFile } = await import('fs/promises');
-      const content = await readFile('./src/services/conversation.ts', 'utf-8');
-
-      assert.ok(
-        content.includes('@deprecated'),
-        'conversation.ts should have deprecation notice'
-      );
-    });
+    // Note: conversation.ts deprecation test removed - file deleted in Phase 6
   });
 });
