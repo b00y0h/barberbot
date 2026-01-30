@@ -29,10 +29,10 @@ Requirements for AWS migration milestone. Each maps to roadmap phases.
 
 ### TTS
 
-- [ ] **TTS-01**: Text-to-speech audio generation via Amazon Polly
-- [ ] **TTS-02**: Streaming audio chunks emitted via EventEmitter (audio, done, error events)
-- [ ] **TTS-03**: Interruption/abort support for barge-in
-- [ ] **TTS-04**: Neural voice selected for natural conversation quality
+- [x] **TTS-01**: Text-to-speech audio generation via Amazon Polly
+- [x] **TTS-02**: Streaming audio chunks emitted via EventEmitter (audio, done, error events)
+- [x] **TTS-03**: Interruption/abort support for barge-in
+- [x] **TTS-04**: Neural voice selected for natural conversation quality
 
 ### LLM
 
@@ -80,10 +80,10 @@ Deferred to future milestones.
 | STT-02 | Phase 3 | Complete |
 | STT-03 | Phase 3 | Complete |
 | STT-04 | Phase 3 | Complete |
-| TTS-01 | Phase 4 | Pending |
-| TTS-02 | Phase 4 | Pending |
-| TTS-03 | Phase 4 | Pending |
-| TTS-04 | Phase 4 | Pending |
+| TTS-01 | Phase 4 | Complete |
+| TTS-02 | Phase 4 | Complete |
+| TTS-03 | Phase 4 | Complete |
+| TTS-04 | Phase 4 | Complete |
 | LLM-01 | Phase 5 | Pending |
 | LLM-02 | Phase 5 | Pending |
 | LLM-03 | Phase 5 | Pending |
@@ -102,4 +102,4 @@ Deferred to future milestones.
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-30 after Phase 3 completion*
+*Last updated: 2026-01-30 after Phase 4 completion*
