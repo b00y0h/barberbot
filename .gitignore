@@ -3,3 +3,9 @@ dist/
 data/*.db
 .env
 *.log
+
+# OS files
+.DS_Store
+
+# Package manager caches
+.pnpm-store/
