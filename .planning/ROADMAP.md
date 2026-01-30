@@ -90,10 +90,11 @@ Plans:
   3. Interruption/abort works mid-sentence when caller speaks (barge-in preserved)
   4. Audio output sounds clear on Twilio call (no distortion from PCM→mulaw conversion)
 
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 04-01: TBD during planning
+- [ ] 04-01-PLAN.md — TDD AWSPollyTTS class with EventEmitter interface
+- [ ] 04-02-PLAN.md — Wire AWSPollyTTS into CallManager
 
 ### Phase 5: LLM Migration
 **Goal**: Multi-turn conversation with tool calling via AWS Bedrock Claude model
@@ -143,10 +144,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Infrastructure Setup | 1/1 | ✓ Complete | 2026-01-28 |
 | 2. Audio Pipeline Foundation | 1/1 | ✓ Complete | 2026-01-29 |
 | 3. STT Migration | 3/3 | ✓ Complete | 2026-01-30 |
-| 4. TTS Migration | 0/TBD | Not started | - |
+| 4. TTS Migration | 0/2 | Planned | - |
 | 5. LLM Migration | 0/TBD | Not started | - |
 | 6. Integration & Cleanup | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-28*
-*Last updated: 2026-01-30 after Phase 3 completion*
+*Last updated: 2026-01-30 after Phase 4 planning*
