@@ -2,21 +2,29 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-27)
+See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** Callers can have a natural phone conversation with the bot and book an appointment without human intervention.
-**Current focus:** Milestone Complete - AWS Migration
+**Current focus:** v1.0 shipped, ready for next milestone
 
 ## Current Position
 
-Phase: 6 of 6 (Integration & Cleanup) — COMPLETE
-Plan: 6 of 6 in current phase
-Status: Milestone complete
-Last activity: 2026-01-30 — Completed Phase 6 (Integration & Cleanup)
+Phase: None (milestone complete)
+Plan: None
+Status: v1.0 archived
+Last activity: 2026-01-30 — Archived v1.0 milestone
 
-Progress: [██████████] 100%
+Progress: Ready for `/gsd:new-milestone`
 
-## Performance Metrics
+## Completed Milestones
+
+- **v1.0: AWS Migration** (2026-01-27 → 2026-01-30)
+  - 6 phases, 20 plans, 51 commits
+  - 23/23 requirements satisfied
+  - 106 tests passing
+  - See: `.planning/milestones/v1.0-ROADMAP.md`
+
+## Performance Metrics (v1.0)
 
 **Velocity:**
 - Total plans completed: 20
@@ -34,50 +42,29 @@ Progress: [██████████] 100%
 | 05-llm-migration | 7 | 12min | 1.7min |
 | 06-integration-cleanup | 6 | 10min | 1.7min |
 
-**Recent Trend:**
-- Last 5 plans: 06-02 (2min), 06-03 (2min), 06-04 (2min), 06-05 (1min), 06-06 (1min)
-- Trend: Consistent fast execution
-
-*Updated after each plan completion*
-
 ## Accumulated Context
 
-### Decisions
-
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
+### Key Decisions (v1.0)
 
 - Default AWS region us-east-2 (Bedrock latency-optimized)
 - Lazy singleton pattern for AWS clients (matches twilio.ts style)
-- [AWS] log prefix for consistency
 - Lookup table for mulaw decode (faster than algorithm)
-- G.711 +0/-0 silence representation handled in tests
-- Filler word filtering (um, uh, like) built into AWSTranscribeSTT
-- High partial result stability for cleaner transcript updates
-- EventEmitter interface for STT provider abstraction (enables future swaps)
-- 300ms debounce for utterance_end detection (responsive yet stable)
-- Generative voice engine with Ruth voice for TTS (best conversational quality)
-- 100ms audio chunks for low-latency TTS streaming (1600 PCM → 800 mulaw bytes)
-- Claude 3.5 Sonnet for conversation, Haiku for summaries (quality vs cost)
-- Sentence boundary detection for streaming TTS (period, question mark, exclamation)
-- Bedrock Converse API with toolConfig for tool calling
+- 300ms debounce for utterance_end detection
+- Generative voice engine with Ruth voice for TTS
+- 100ms audio chunks for low-latency TTS streaming
+- Claude 3.5 Sonnet for conversation, Haiku for summaries
+- Sentence boundary detection for streaming TTS
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
-Human verification needed for Phase 1:
-1. AWS credentials authentication test (requires live credentials)
-2. Claude 3.5 model availability in Bedrock console (requires AWS console access)
-
-Human verification needed for Phase 5:
-1. First-token latency measurement (requires live Bedrock API)
-2. End-to-end call flow with LLM (requires Twilio + Bedrock integration)
+None — milestone complete.
 
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Completed Phase 6 (Integration & Cleanup) - MILESTONE COMPLETE
-Resume file: None
+Stopped at: v1.0 milestone archived
+Resume file: None — start fresh with `/gsd:new-milestone`
