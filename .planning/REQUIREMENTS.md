@@ -11,8 +11,8 @@ Requirements for AWS migration milestone. Each maps to roadmap phases.
 
 - [x] **INFRA-01**: AWS IAM credentials (access key + secret key) configured via environment variables
 - [x] **INFRA-02**: AWS region configured for latency-optimized Bedrock inference
-- [ ] **INFRA-03**: Old provider SDK dependencies removed (openai, @deepgram/sdk)
-- [ ] **INFRA-04**: Old provider environment variables removed (OPENAI_API_KEY, DEEPGRAM_API_KEY, ELEVENLABS_API_KEY)
+- [x] **INFRA-03**: Old provider SDK dependencies removed (openai, @deepgram/sdk)
+- [x] **INFRA-04**: Old provider environment variables removed (OPENAI_API_KEY, DEEPGRAM_API_KEY, ELEVENLABS_API_KEY)
 
 ### Audio
 
@@ -44,9 +44,9 @@ Requirements for AWS migration milestone. Each maps to roadmap phases.
 
 ### Integration
 
-- [ ] **INTG-01**: End-to-end inbound call works: ring → greeting → conversation → booking → hangup
-- [ ] **INTG-02**: Barge-in/interruption works at all conversation stages
-- [ ] **INTG-03**: Call manager orchestration unchanged (same ActiveCall interface)
+- [x] **INTG-01**: End-to-end inbound call works: ring → greeting → conversation → booking → hangup
+- [x] **INTG-02**: Barge-in/interruption works at all conversation stages
+- [x] **INTG-03**: Call manager orchestration unchanged (same ActiveCall interface)
 
 ## v2 Requirements
 
@@ -89,17 +89,17 @@ Deferred to future milestones.
 | LLM-03 | Phase 5 | Complete |
 | LLM-04 | Phase 5 | Complete |
 | LLM-05 | Phase 5 | Complete |
-| INTG-01 | Phase 6 | Pending |
-| INTG-02 | Phase 6 | Pending |
-| INTG-03 | Phase 6 | Pending |
-| INFRA-03 | Phase 6 | Pending |
-| INFRA-04 | Phase 6 | Pending |
+| INTG-01 | Phase 6 | Complete |
+| INTG-02 | Phase 6 | Complete |
+| INTG-03 | Phase 6 | Complete |
+| INFRA-03 | Phase 6 | Complete |
+| INFRA-04 | Phase 6 | Complete |
 
 **Coverage:**
 - v1 requirements: 23 total
 - Mapped to phases: 23
-- Unmapped: 0 ✓
+- Complete: 23 ✓
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-30 after Phase 5 completion*
+*Last updated: 2026-01-30 after Phase 6 completion (all v1 requirements complete)*

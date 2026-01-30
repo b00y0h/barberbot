@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: STT Migration** - Deepgram → AWS Transcribe Streaming
 - [x] **Phase 4: TTS Migration** - ElevenLabs/Deepgram → Amazon Polly
 - [x] **Phase 5: LLM Migration** - OpenAI → AWS Bedrock Claude with tool calling
-- [ ] **Phase 6: Integration & Cleanup** - End-to-end validation and legacy removal
+- [x] **Phase 6: Integration & Cleanup** - End-to-end validation and legacy removal
 
 ## Phase Details
 
@@ -135,10 +135,15 @@ Plans:
   4. Old provider dependencies removed from package.json (openai, @deepgram/sdk)
   5. Old provider environment variables removed from configuration (OPENAI_API_KEY, DEEPGRAM_API_KEY, ELEVENLABS_API_KEY)
 
-**Plans**: TBD
+**Plans:** 6 plans
 
 Plans:
-- [ ] 06-01: TBD during planning
+- [x] 06-01-PLAN.md — Integration tests for call flow scenarios
+- [x] 06-02-PLAN.md — Remove legacy provider code
+- [x] 06-03-PLAN.md — Remove legacy npm dependencies
+- [x] 06-04-PLAN.md — Add startup validation for legacy env vars
+- [x] 06-05-PLAN.md — Update environment documentation
+- [x] 06-06-PLAN.md — Final verification and phase completion
 
 ## Progress
 
@@ -152,8 +157,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. STT Migration | 3/3 | ✓ Complete | 2026-01-30 |
 | 4. TTS Migration | 2/2 | ✓ Complete | 2026-01-30 |
 | 5. LLM Migration | 7/7 | ✓ Complete | 2026-01-30 |
-| 6. Integration & Cleanup | 0/TBD | Not started | - |
+| 6. Integration & Cleanup | 6/6 | ✓ Complete | 2026-01-30 |
 
 ---
 *Roadmap created: 2026-01-28*
-*Last updated: 2026-01-30 after Phase 5 completion*
+*Last updated: 2026-01-30 after Phase 6 completion (milestone complete)*
