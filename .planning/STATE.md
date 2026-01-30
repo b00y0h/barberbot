@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Callers can have a natural phone conversation with the bot and book an appointment without human intervention.
-**Current focus:** Phase 5 - LLM Migration
+**Current focus:** Phase 6 - Integration & Cleanup
 
 ## Current Position
 
-Phase: 5 of 6 (LLM Migration)
+Phase: 6 of 6 (Integration & Cleanup)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-01-30 — Completed Phase 4 (TTS Migration)
+Last activity: 2026-01-30 — Completed Phase 5 (LLM Migration)
 
-Progress: [██████░░░░] 67%
+Progress: [████████░░] 83%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 2.4 min
-- Total execution time: 0.28 hours
+- Total plans completed: 14
+- Average duration: 2.1 min
+- Total execution time: 0.49 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [██████░░░░] 67%
 | 02-audio-pipeline-foundation | 1 | 3min | 3min |
 | 03-stt-migration | 3 | 6min | 2min |
 | 04-tts-migration | 2 | 4min | 2min |
+| 05-llm-migration | 7 | 12min | 1.7min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (2min), 03-02 (1min), 03-03 (3min), 04-01 (2min), 04-02 (2min)
-- Trend: Consistent (TTS plans similar to STT migration)
+- Last 5 plans: 05-03 (2min), 05-04 (2min), 05-05 (1min), 05-06 (2min), 05-07 (1min)
+- Trend: Consistent fast execution
 
 *Updated after each plan completion*
 
@@ -56,6 +57,9 @@ Recent decisions affecting current work:
 - 300ms debounce for utterance_end detection (responsive yet stable)
 - Generative voice engine with Ruth voice for TTS (best conversational quality)
 - 100ms audio chunks for low-latency TTS streaming (1600 PCM → 800 mulaw bytes)
+- Claude 3.5 Sonnet for conversation, Haiku for summaries (quality vs cost)
+- Sentence boundary detection for streaming TTS (period, question mark, exclamation)
+- Bedrock Converse API with toolConfig for tool calling
 
 ### Pending Todos
 
@@ -67,8 +71,12 @@ Human verification needed for Phase 1:
 1. AWS credentials authentication test (requires live credentials)
 2. Claude 3.5 model availability in Bedrock console (requires AWS console access)
 
+Human verification needed for Phase 5:
+1. First-token latency measurement (requires live Bedrock API)
+2. End-to-end call flow with LLM (requires Twilio + Bedrock integration)
+
 ## Session Continuity
 
 Last session: 2026-01-30
-Stopped at: Completed Phase 4 (TTS Migration)
+Stopped at: Completed Phase 5 (LLM Migration)
 Resume file: None

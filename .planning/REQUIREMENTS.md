@@ -36,11 +36,11 @@ Requirements for AWS migration milestone. Each maps to roadmap phases.
 
 ### LLM
 
-- [ ] **LLM-01**: Multi-turn conversation via AWS Bedrock Converse API with Claude model
-- [ ] **LLM-02**: Tool calling ported: book_appointment, check_availability, collect_customer_info, get_business_info
-- [ ] **LLM-03**: System prompt and business profile context passed to Claude
-- [ ] **LLM-04**: Streaming responses for lower time-to-first-token
-- [ ] **LLM-05**: Tool execution loop handles multi-step tool calls
+- [x] **LLM-01**: Multi-turn conversation via AWS Bedrock Converse API with Claude model
+- [x] **LLM-02**: Tool calling ported: book_appointment, check_availability, collect_customer_info, get_business_info
+- [x] **LLM-03**: System prompt and business profile context passed to Claude
+- [x] **LLM-04**: Streaming responses for lower time-to-first-token
+- [x] **LLM-05**: Tool execution loop handles multi-step tool calls
 
 ### Integration
 
@@ -84,11 +84,11 @@ Deferred to future milestones.
 | TTS-02 | Phase 4 | Complete |
 | TTS-03 | Phase 4 | Complete |
 | TTS-04 | Phase 4 | Complete |
-| LLM-01 | Phase 5 | Pending |
-| LLM-02 | Phase 5 | Pending |
-| LLM-03 | Phase 5 | Pending |
-| LLM-04 | Phase 5 | Pending |
-| LLM-05 | Phase 5 | Pending |
+| LLM-01 | Phase 5 | Complete |
+| LLM-02 | Phase 5 | Complete |
+| LLM-03 | Phase 5 | Complete |
+| LLM-04 | Phase 5 | Complete |
+| LLM-05 | Phase 5 | Complete |
 | INTG-01 | Phase 6 | Pending |
 | INTG-02 | Phase 6 | Pending |
 | INTG-03 | Phase 6 | Pending |
@@ -102,4 +102,4 @@ Deferred to future milestones.
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-30 after Phase 4 completion*
+*Last updated: 2026-01-30 after Phase 5 completion*

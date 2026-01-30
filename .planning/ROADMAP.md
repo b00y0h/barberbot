@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Audio Pipeline Foundation** - mulaw↔PCM conversion for Twilio compatibility
 - [x] **Phase 3: STT Migration** - Deepgram → AWS Transcribe Streaming
 - [x] **Phase 4: TTS Migration** - ElevenLabs/Deepgram → Amazon Polly
-- [ ] **Phase 5: LLM Migration** - OpenAI → AWS Bedrock Claude with tool calling
+- [x] **Phase 5: LLM Migration** - OpenAI → AWS Bedrock Claude with tool calling
 - [ ] **Phase 6: Integration & Cleanup** - End-to-end validation and legacy removal
 
 ## Phase Details
@@ -110,10 +110,16 @@ Plans:
   4. Streaming responses deliver first token within 1-2 seconds of request
   5. Multi-step tool calls execute in sequence (e.g., check availability → book appointment)
 
-**Plans**: TBD
+**Plans:** 7 plans
 
 Plans:
-- [ ] 05-01: TBD during planning
+- [x] 05-01-PLAN.md — Bedrock Tool Definitions and Message Types
+- [x] 05-02-PLAN.md — Bedrock Client Singleton
+- [x] 05-03-PLAN.md — Core Conversation Functions
+- [x] 05-04-PLAN.md — Streaming Conversation with Sentence Detection
+- [x] 05-05-PLAN.md — Call Summary Generation
+- [x] 05-06-PLAN.md — Integration Wiring
+- [x] 05-07-PLAN.md — Integration Testing
 
 ### Phase 6: Integration & Cleanup
 **Goal**: Complete end-to-end call flow working with AWS services only, legacy dependencies removed
@@ -145,9 +151,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Audio Pipeline Foundation | 1/1 | ✓ Complete | 2026-01-29 |
 | 3. STT Migration | 3/3 | ✓ Complete | 2026-01-30 |
 | 4. TTS Migration | 2/2 | ✓ Complete | 2026-01-30 |
-| 5. LLM Migration | 0/TBD | Not started | - |
+| 5. LLM Migration | 7/7 | ✓ Complete | 2026-01-30 |
 | 6. Integration & Cleanup | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-28*
-*Last updated: 2026-01-30 after Phase 4 completion*
+*Last updated: 2026-01-30 after Phase 5 completion*
