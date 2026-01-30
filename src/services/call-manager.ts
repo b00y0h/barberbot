@@ -3,10 +3,10 @@ import {
   ConversationState,
   createConversation,
   getGreeting,
-  processUserMessage,
+  processUserMessageStreaming,
   generateCallSummary,
   getTranscript,
-} from './conversation';
+} from './bedrock-conversation';
 import {
   createCallRecord,
   updateCallRecord,
@@ -132,18 +132,82 @@ async function handleUserUtterance(call: ActiveCall, text: string): Promise<void
   console.log(`[CallManager] Processing utterance: "${text}"`);
 
   try {
-    const response = await processUserMessage(
+    // Use streaming version with sentence callback for TTS
+    const response = await processUserMessageStreaming(
       call.conversation,
       text,
-      call.phoneNumber
+      call.phoneNumber,
+      async (sentence: string) => {
+        // Send each sentence to TTS as it completes
+        console.log(`[CallManager] Streaming sentence to TTS: "${sentence}"`);
+        await speakSentence(call, sentence);
+      }
     );
 
-    console.log(`[CallManager] Bot response: "${response}"`);
-    await speakResponse(call, response);
+    console.log(`[CallManager] Full response: "${response}"`);
+
+    // Mark speaking complete and send mark event
+    call.isBotSpeaking = false;
+    if (call.sendAudio && call.streamSid) {
+      call.sendAudio(JSON.stringify({
+        event: 'mark',
+        streamSid: call.streamSid,
+        mark: { name: `response-complete` },
+      }));
+    }
   } catch (err) {
     console.error('[CallManager] Error processing utterance:', err);
     await speakResponse(call, "I'm sorry, I didn't catch that. Could you say that again?");
   }
+}
+
+/**
+ * Stream a single sentence to TTS
+ * Used during streaming conversation for incremental speech
+ */
+async function speakSentence(call: ActiveCall, sentence: string): Promise<void> {
+  if (!call.sendAudio || !call.streamSid) {
+    console.warn('[CallManager] Cannot send audio — no stream connected');
+    return;
+  }
+
+  call.isBotSpeaking = true;
+
+  return new Promise<void>((resolve) => {
+    const tts = new AWSPollyTTS();
+    let sequenceNumber = 0;
+
+    tts.on('audio', (mulawChunk: Buffer) => {
+      if (!call.isBotSpeaking) return; // interrupted
+
+      const payload = mulawChunk.toString('base64');
+      const mediaMessage = JSON.stringify({
+        event: 'media',
+        streamSid: call.streamSid,
+        media: {
+          payload,
+        },
+      });
+
+      call.sendAudio!(mediaMessage);
+      sequenceNumber++;
+    });
+
+    tts.on('done', () => {
+      // Note: Don't set isBotSpeaking = false here
+      // We may have more sentences coming
+      resolve();
+    });
+
+    tts.on('error', (err: Error) => {
+      console.error('[CallManager] TTS error:', err);
+      resolve();
+    });
+
+    // Store TTS reference for interruption
+    call.tts = tts;
+    tts.synthesize(sentence);
+  });
 }
 
 export async function sendGreeting(call: ActiveCall): Promise<void> {

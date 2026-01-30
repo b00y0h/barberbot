@@ -1,3 +1,9 @@
+/**
+ * @deprecated This module uses OpenAI and is replaced by bedrock-conversation.ts
+ * Kept for reference during migration. Will be removed after verification.
+ *
+ * Migration: Import from './bedrock-conversation' instead.
+ */
 import OpenAI from 'openai';
 import { env } from '../config/env';
 import { getBusinessProfile } from '../config/business';
