@@ -2,6 +2,13 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { bedrockTools, BedrockMessage, BedrockContentBlock, ToolUseBlock, ToolResultBlock } from './bedrock-tools';
 
+// Helper type for schema assertions
+type JsonSchema = {
+  type?: string;
+  properties?: Record<string, { type?: string; enum?: string[]; description?: string }>;
+  required?: string[];
+};
+
 describe('bedrock-tools', () => {
   describe('bedrockTools array', () => {
     it('exports array of 4 tools', () => {
@@ -22,15 +29,16 @@ describe('bedrock-tools', () => {
     it('has collect_customer_info tool', () => {
       const tool = bedrockTools.find(t => t.toolSpec?.name === 'collect_customer_info');
       assert.ok(tool, 'should have collect_customer_info tool');
-      assert.ok(tool.toolSpec?.inputSchema?.json?.properties?.name, 'should have name property');
-      assert.ok(tool.toolSpec?.inputSchema?.json?.properties?.phone, 'should have phone property');
-      assert.ok(tool.toolSpec?.inputSchema?.json?.properties?.email, 'should have email property');
+      const schema = tool.toolSpec?.inputSchema?.json as JsonSchema;
+      assert.ok(schema?.properties?.name, 'should have name property');
+      assert.ok(schema?.properties?.phone, 'should have phone property');
+      assert.ok(schema?.properties?.email, 'should have email property');
     });
 
     it('has check_availability tool with required date', () => {
       const tool = bedrockTools.find(t => t.toolSpec?.name === 'check_availability');
       assert.ok(tool, 'should have check_availability tool');
-      const schema = tool.toolSpec?.inputSchema?.json;
+      const schema = tool.toolSpec?.inputSchema?.json as JsonSchema;
       assert.ok(schema?.properties?.date, 'should have date property');
       assert.ok(schema?.properties?.staff, 'should have staff property');
       assert.deepStrictEqual(schema?.required, ['date'], 'date should be required');
@@ -39,7 +47,7 @@ describe('bedrock-tools', () => {
     it('has book_appointment tool with required fields', () => {
       const tool = bedrockTools.find(t => t.toolSpec?.name === 'book_appointment');
       assert.ok(tool, 'should have book_appointment tool');
-      const schema = tool.toolSpec?.inputSchema?.json;
+      const schema = tool.toolSpec?.inputSchema?.json as JsonSchema;
       assert.ok(schema?.properties?.service, 'should have service property');
       assert.ok(schema?.properties?.date, 'should have date property');
       assert.ok(schema?.properties?.time, 'should have time property');
@@ -49,7 +57,7 @@ describe('bedrock-tools', () => {
     it('has get_business_info tool with enum topic', () => {
       const tool = bedrockTools.find(t => t.toolSpec?.name === 'get_business_info');
       assert.ok(tool, 'should have get_business_info tool');
-      const schema = tool.toolSpec?.inputSchema?.json;
+      const schema = tool.toolSpec?.inputSchema?.json as JsonSchema;
       assert.ok(schema?.properties?.topic?.enum, 'topic should have enum');
       assert.deepStrictEqual(
         schema?.properties?.topic?.enum,
